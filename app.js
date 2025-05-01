@@ -17,10 +17,21 @@ app.get('/', (req, res) => {
   res.render('home');
 });
 
-app.get('/makeCampground', async (req, res) => {
-  const camp = new Campground({ title: 'My Backyard', description: 'Cheap Camping' });
-  await camp.save();
-  res.send(camp);
+//Index ejs Route
+app.get('/campgrounds', async (req, res) => {
+  const campgrounds = await Campground.find({});
+  res.render('campgrounds/index', { campgrounds });
+});
+
+//GET, view Form
+app.get('/campgrounds/new', (req, res) => {
+  res.render('campgrounds/new');
+});
+//Show ejs Specific id - Route
+app.get('/campgrounds/:id', async (req, res) => {
+  const { id } = req.params;
+  const campground = await Campground.findById(id);
+  res.render('campgrounds/show', { campground });
 });
 
 app.listen(3000, () => {
